@@ -1,0 +1,37 @@
+const Images = {
+  setting: require('../assets/images/setting.png'),
+  drawer: require('../assets/images/drawer.png'),
+  back: require('../assets/images/back.png'),
+  edit: require('../assets/images/edit.png'),
+  plus: require('../assets/images/plus.png'),
+
+  instagram: require('../assets/images/instagram.png'),
+  facebook2: require('../assets/images/facebook2.png'),
+  twitter: require('../assets/images/twitter.png'),
+  netflix: require('../assets/images/netflix.png'),
+  linkedin: require('../assets/images/linkedin.png'),
+  gmail: require('../assets/images/gmail.png'),
+  reddit: require('../assets/images/reddit.png'),
+  pinterest: require('../assets/images/pinterest.png'),
+  tiktok: require('../assets/images/tiktok.png'),
+  snapchat: require('../assets/images/snapchat.png'),
+  spotify: require('../assets/images/spotify.png'),
+  teams: require('../assets/images/teams.png'),
+  whatsapp: require('../assets/images/whatsapp.png'),
+  youtube: require('../assets/images/youtube.png'),
+  amazon: require('../assets/images/amazon.png'),
+  discord: require('../assets/images/discord.png'),
+  tinder: require('../assets/images/tinder.png'),
+  skype: require('../assets/images/skype.png'),
+  slack: require('../assets/images/slack.png'),
+  telegram: require('../assets/images/telegram.png'),
+  zoom: require('../assets/images/zoom.png'),
+
+  term: require('../assets/images/term.png'),
+  policy: require('../assets/images/policy.png'),
+  rate: require('../assets/images/rate.png'),
+  share: require('../assets/images/share.png'),
+  request: require('../assets/images/request.png'),
+};
+
+export default Images;

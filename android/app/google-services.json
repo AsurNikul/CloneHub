@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1023327997528",
+    "project_id": "clonehub-72439",
+    "storage_bucket": "clonehub-72439.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1023327997528:android:ca5bae72e61170d95e442d",
+        "android_client_info": {
+          "package_name": "com.clonehub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALLv42Ui-qQyXJi2rvq-F_JMIqEkRMUAw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
