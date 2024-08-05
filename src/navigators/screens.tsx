@@ -7,4 +7,5 @@ export const AuthScr = {
   Setting: React.lazy(() => import('../screens/Main/Setting')),
   RequestNew: React.lazy(() => import('../screens/Main/RequestNew')),
   Terms: React.lazy(() => import('../screens/Main/Terms')),
+  WebApps: React.lazy(() => import('../screens/Main/WebApp')),
 };

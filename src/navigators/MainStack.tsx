@@ -27,6 +27,7 @@ const MainStack = () => {
           component={AuthScr.RequestNew}
         />
         <Stack.Screen name={SCREENS.Terms} component={AuthScr.Terms} />
+        <Stack.Screen name={SCREENS.WEBAPPS} component={AuthScr.WebApps} />
       </Stack.Navigator>
     </NavigationContainer>
   );

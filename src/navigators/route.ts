@@ -5,6 +5,7 @@ const SCREENS = {
   SETTING: 'Setting',
   REQUEST_NEW: 'Request_new',
   Terms: 'Terms',
+  WEBAPPS: 'WebApps',
 };
 
 export default SCREENS;

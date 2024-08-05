@@ -25,7 +25,7 @@ interface btnProps extends TouchableOpacityProps {
   btnStyle?: StyleProp<any>;
   title?: string;
   btnTextStyle?: TextStyle;
-  onPress?: (event: GestureResponderEvent) => void;
+  onPress?: () => void;
   txtSize?: number;
   txtClr?: string;
   mt?: number;
@@ -64,11 +64,11 @@ const PrimaryBtn: FunctionComponent<btnProps> = (
       ],
     };
   });
-  const handlePress = (e: GestureResponderEvent) => {
+  const handlePress = () => {
     RNReactNativeHapticFeedback.trigger('impactLight', hapticOptions);
     scale.value = withSequence(withSpring(0.96), withSpring(1));
     if (!!onPress) {
-      onPress(e);
+      onPress();
     }
   };
   return (
@@ -83,6 +83,7 @@ const PrimaryBtn: FunctionComponent<btnProps> = (
         },
         styles.btnStyle,
         btnStyle,
+        rStyle,
       ]}
       {...Props}
       onPress={handlePress}>

@@ -1,9 +1,8 @@
-import {Platform, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {moderateScale} from 'react-native-size-matters';
 
 import Fonts from '../../constants/fonts';
 import {colors} from '../../theme';
-import {HEIGHT} from '../../theme/commSty';
 
 const styles = StyleSheet.create({
   inputContainerStyle: {
@@ -11,7 +10,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '90%',
     borderColor: colors.black,
-    borderWidth: StyleSheet.hairlineWidth,
+    borderWidth: moderateScale(0.8),
     alignItems: 'center',
     alignSelf: 'center',
     borderRadius: moderateScale(10),

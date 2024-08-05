@@ -7,6 +7,7 @@ import notifee, {AndroidImportance} from '@notifee/react-native';
 
 // import ImageCropPicker from 'react-native-image-crop-picker';
 import {Linking} from 'react-native';
+import store from '../redux/store';
 
 // Check App Platform
 const isIOS: boolean = Platform.OS === 'ios';
@@ -71,8 +72,9 @@ const showPopupWithExit = (
 
 export const GetDeviceToken = async () => {
   try {
-    const token = await firebase.messaging().getToken();
     const authStatus = await messaging().requestPermission();
+    const token = await firebase.messaging().getToken();
+    console.log('🚀 ~ GetDeviceToken ~ token:', token);
 
     const enabled =
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
@@ -135,57 +137,50 @@ export const PermissionFromSetting = (err: any) => {
   }
 };
 
-// export const NotifyFunc = async () => {
-//   const DisplayNotification = async (notification: any) => {
-//     try {
-//       const channel = await notifee.createChannel({
-//         id: 'default_app',
-//         name: 'default_app',
-//       });
+export const NotifyFunc = async () => {
+  const DisplayNotification = async (notification: any) => {
+    try {
+      await notifee.createChannel({
+        id: 'clone_app',
+        name: 'Clone_app',
+      });
 
-//       notifee.displayNotification({
-//         android: {
-//           channelId: 'default_app',
-//           importance: AndroidImportance.HIGH,
-//           pressAction: {
-//             id: 'default',
-//           },
-//         },
-//         title: notification?.body,
-//         body: notification?.title,
-//       });
-//     } catch (error) {
-//       console.error('Error displaying notification:', error);
-//     }
-//   };
-//   const notifi1 = messaging().onMessage(async remoteMessage => {
-//     console.log(
-//       '🚀 ~ file: func.ts:220 ~ notifi1 ~ when msg comes:',
-//       remoteMessage?.data?.data,
-//     );
-//     await DisplayNotification(remoteMessage.notification);
-//   });
+      await notifee.displayNotification({
+        android: {
+          channelId: 'default_app',
+          importance: AndroidImportance.HIGH,
+          pressAction: {
+            id: 'default',
+          },
+        },
+        ios: {},
+        title: notification?.body,
+        body: notification?.title,
+      });
+    } catch (error) {
+      console.error('Error displaying notification:', error);
+    }
+  };
+  messaging().onMessage(async remoteMessage => {
+    console.log(
+      '🚀 ~ file: func.ts:220 ~ notifi1 ~ when msg comes:',
+      remoteMessage?.data,
+    );
+    await DisplayNotification(remoteMessage.notification);
+  });
 
-//   const notifi2 = messaging().onNotificationOpenedApp(async remoteMessage => {
-//     let subData = remoteMessage?.data?.data;
-//     let replaceNullData = subData.replace(/None/g, 'null');
-//     let conveteredJson = JSON.parse(replaceNullData);
-//     console.log(
-//       '🚀 ~ file: func.ts:236 ~ notifi2 ~ conveteredJson:',
-//       conveteredJson,
-//     );
-//     await DisplayNotification(remoteMessage.notification);
-//   });
+  messaging().onNotificationOpenedApp(async remoteMessage => {
+    console.log('🚀 ~ messaging ~ remoteMessage:', remoteMessage);
+    await DisplayNotification(remoteMessage.notification);
+  });
 
-//   const notifi3 = messaging().setBackgroundMessageHandler(
-//     async remoteMessage => {
-//       console.log(
-//         '🚀 ~ file: func.ts:225 ~ NotifyFunc ~ remoteMessage:',
-//         remoteMessage,
-//       );
-//       await DisplayNotification(remoteMessage.notification);
-//     },
-//   );
-// };
+  messaging().setBackgroundMessageHandler(async remoteMessage => {
+    console.log(
+      '🚀 ~ file: func.ts:225 ~ NotifyFunc ~ remoteMessage:',
+      remoteMessage,
+    );
+    await DisplayNotification(remoteMessage.notification);
+  });
+};
 
 export {showReviewPopup};

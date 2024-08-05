@@ -28,6 +28,10 @@ const commonSty = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.whiteLight,
   },
+  flashContainer: {
+    flex: 1,
+    width: WIDTH,
+  },
   mainCenter: {
     flex: 1,
     alignItems: 'center',

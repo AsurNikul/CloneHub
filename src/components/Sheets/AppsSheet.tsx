@@ -6,28 +6,44 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import React, {forwardRef, PropsWithChildren, Ref, useState} from 'react';
+import React, {
+  forwardRef,
+  PropsWithChildren,
+  Ref,
+  useEffect,
+  useState,
+} from 'react';
 import Sheet from '../Sheet';
 import {colors, commonSty} from '../../theme';
-import {ActionSheetRef} from 'react-native-actions-sheet';
+import ActionSheet, {ActionSheetRef} from 'react-native-actions-sheet';
 import {moderateScale} from 'react-native-size-matters';
 import {appsData} from '../../constants/data';
 import {WIDTH} from '../../theme/commSty';
 import Typography from '../Typo';
 import {Fonts} from '../../constants';
 import PrimaryBtn from '../button';
+import {useDispatch, useSelector} from 'react-redux';
+import {saveApps} from '../../redux/MainSlice';
+import {RootReducer, rootReducerType} from '../../redux/store';
 
 type Props = {
   containerSty?: ViewStyle;
 };
-
 // Using `Ref<ActionSheetRef>` to handle `null` or `undefined` values
-const AppsSheet = forwardRef<ActionSheetRef, PropsWithChildren<Props>>(
+const AppsSheet = forwardRef<ActionSheetRef, Props>(
   ({containerSty}, ref: Ref<ActionSheetRef>) => {
-    const [selected, setSelected] = useState<any>([]);
+    const dispatch = useDispatch();
+    const AppData = useSelector((state: rootReducerType) => state.main.apps);
+    const [selected, setSelected] = useState(AppData);
+
+    useEffect(() => {
+      setSelected(AppData);
+    }, [AppData]);
+
     const handleCancel = () => {
       if (ref) {
         ref.current.hide();
+        setSelected(AppData);
       }
     };
     const handleAddItem = (item: any) => {
@@ -37,6 +53,10 @@ const AppsSheet = forwardRef<ActionSheetRef, PropsWithChildren<Props>>(
         setSelected([...selected, item]);
       }
     };
+    const handleConfirm = () => {
+      dispatch(saveApps(selected));
+      handleCancel();
+    };
     return (
       <Sheet ref={ref}>
         <View style={[styles.mainContainer, containerSty]}>
@@ -44,36 +64,15 @@ const AppsSheet = forwardRef<ActionSheetRef, PropsWithChildren<Props>>(
             data={appsData}
             showsVerticalScrollIndicator={false}
             numColumns={3}
+            keyExtractor={item => item.id.toString()}
             renderItem={({item}) => {
-              let isSelectedItem = selected.includes(item);
+              const isSelectedItem = selected?.some(i => i.id === item.id);
               return (
-                <TouchableOpacity
+                <MiniApp
+                  item={item}
                   onPress={() => handleAddItem(item)}
-                  style={[
-                    {
-                      backgroundColor: isSelectedItem
-                        ? colors.primaryOpacity
-                        : colors.whiteLight,
-                      borderColor: isSelectedItem
-                        ? colors.primary
-                        : colors.greyDark,
-                    },
-                    styles.itemContainer,
-                  ]}
-                  activeOpacity={0.6}>
-                  <Image
-                    resizeMode="contain"
-                    source={item.img}
-                    style={[commonSty.size(55)]}
-                  />
-                  <Typography
-                    title={item.title}
-                    mt={5}
-                    size={16}
-                    font={isSelectedItem ? Fonts.Bold : Fonts.Regular}
-                    color={isSelectedItem ? colors.white : colors.greyDark}
-                  />
-                </TouchableOpacity>
+                  isSelectedItem={isSelectedItem}
+                />
               );
             }}
           />
@@ -87,7 +86,7 @@ const AppsSheet = forwardRef<ActionSheetRef, PropsWithChildren<Props>>(
             <PrimaryBtn
               title="Confirm"
               btnStyle={styles.confirmBtnSty}
-              onPress={handleCancel}
+              onPress={handleConfirm}
             />
           </View>
         </View>
@@ -95,6 +94,42 @@ const AppsSheet = forwardRef<ActionSheetRef, PropsWithChildren<Props>>(
     );
   },
 );
+
+interface miniProps {
+  onPress: () => void;
+  item: any;
+  isSelectedItem?: boolean;
+}
+
+export const MiniApp = ({onPress, isSelectedItem = false, item}: miniProps) => {
+  return (
+    <TouchableOpacity
+      onPress={onPress}
+      style={[
+        {
+          backgroundColor: isSelectedItem
+            ? colors.primaryOpacity
+            : colors.whiteLight,
+          borderColor: isSelectedItem ? colors.primary : colors.greyDark,
+        },
+        styles.itemContainer,
+      ]}
+      activeOpacity={0.6}>
+      <Image
+        resizeMode="contain"
+        source={item.img}
+        style={[commonSty.size(55)]}
+      />
+      <Typography
+        title={item.title}
+        mt={5}
+        size={16}
+        font={isSelectedItem ? Fonts.Bold : Fonts.Regular}
+        color={isSelectedItem ? colors.white : colors.greyDark}
+      />
+    </TouchableOpacity>
+  );
+};
 
 export default AppsSheet;
 

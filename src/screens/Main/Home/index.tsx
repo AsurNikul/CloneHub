@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React, {createRef, useEffect} from 'react';
+import React, {createRef, useEffect, useRef} from 'react';
 import {colors, commonSty} from '../../../theme';
 import Header from '../../../components/Header';
 import {Images} from '../../../constants';
@@ -16,15 +16,31 @@ import Animated, {
 import Overlay from './Overlay';
 import Drawer from './Drawer';
 import {useNavigation} from '@react-navigation/native';
+import {GetDeviceToken} from '../../../utils/Func';
+import {useDispatch, useSelector} from 'react-redux';
+import {saveToken} from '../../../redux/MainSlice';
+import {FlashList} from '@shopify/flash-list';
+import {MiniApp} from '../../../components/Sheets/AppsSheet';
+import {rootReducerType} from '../../../redux/store';
+import {WIDTH} from '../../../theme/commSty';
+import {ActionSheetRef} from 'react-native-actions-sheet';
+import SCREENS from '../../../navigators/route';
 
 type Props = {};
 
 const Home = (props: Props) => {
+  const sheetRef = useRef<ActionSheetRef>(null);
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const AppData = useSelector((state: rootReducerType) => state.main.apps);
 
   useEffect(() => {
     global.navigation = navigation;
+    GetDeviceToken().then(res => {
+      dispatch(saveToken(res));
+    });
   }, []);
+
   const active = useSharedValue(false);
   const progress = useDerivedValue(() => {
     return withTiming(active.value ? 1 : 0);
@@ -54,13 +70,13 @@ const Home = (props: Props) => {
     };
   }, []);
 
-  const sheetRef = createRef<any>();
   const handleRight = () => {
     console.log('handleRight');
   };
   const handleLeft = () => {
     active.value = true;
   };
+
   return (
     <>
       <Drawer />
@@ -73,11 +89,27 @@ const Home = (props: Props) => {
           active={active}
           onLeftPress={handleLeft}
         />
+        <View
+          style={[commonSty.flashContainer, commonSty.ml15, commonSty.mt15]}>
+          <FlashList
+            data={AppData}
+            estimatedItemSize={100}
+            numColumns={3}
+            renderItem={({item, index}) => {
+              return (
+                <MiniApp
+                  item={item}
+                  onPress={() => {
+                    global.navigation.navigate(SCREENS.WEBAPPS, {item});
+                  }}
+                />
+              );
+            }}
+          />
+        </View>
         <AppsSheet ref={sheetRef} />
         <TouchableImg
-          onPress={() => {
-            sheetRef.current.show();
-          }}
+          onPress={() => sheetRef.current.show()}
           ImgSource={Images.plus}
           size={55}
           style={styles.plus}
